@@ -1,0 +1,503 @@
+            
+        body{
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-image: url("../images/renta.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+
+
+
+        }
+
+
+
+
+
+        #login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        text-align: center;
+            max-width: 400px;
+            padding: 20px;
+            background-color: #2e1503;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            height: 420px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            color:#917b4f;
+        }
+
+        #connect {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #ff9933;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 320px;
+            height: 60px;
+            font-weight: bold;
+           
+        }
+
+        #connectedAddress {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+            color: #917b4f;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        #connectedAddress span {
+            font-weight: bold;
+            font-size: 16px;
+            color: #917b4f;
+        }
+
+        #logo {
+            max-width: 200px; /* Adjust the maximum width of the logo as needed */
+            margin-right: 20px;
+        }
+
+
+
+        #AdminContainer{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #2e1503;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            height: auto;
+            width: 500px;
+
+        }
+
+
+        #adminContent label {
+            font-size: 18px;
+            color: #917b4f;
+            margin-bottom: 10px;
+        }
+        
+        #adminContent input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #917b4f;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #2e1503;
+        }
+        
+        #setRate {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #ff9933;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+
+        #addCarContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #2e1503;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            width: 110%;
+
+        }
+        
+        #addCarContainer label {
+            font-size: 18px;
+            color: #917b4f;
+            margin-bottom: 10px;
+        }
+        
+        #addCarContainer input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #917b4f;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #2e1503;
+        }
+        
+        #addCar {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #ff9933;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+
+
+
+        #deleteCarContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #2e1503;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            width: 110%;
+        }
+
+        #deleteCarContainer label {
+            font-size: 18px;
+            color: #917b4f;
+            margin-bottom: 10px;
+        }
+
+        #deleteCarContainer input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #917b4f;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #2e1503;
+        }
+
+        #deleteCar {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #ff9933;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+
+
+        /* Add this CSS code below your existing styles */
+
+        #allRentalsContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #2e1503;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        #allRentalsContainer button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #ff9933;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        #allRentalsList p {
+            font-size: 16px;
+            color: #917b4f;
+            margin-bottom: 10px;
+        }
+
+
+        #getAvailableCarsContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #2e1503;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            width: 110%;
+        }
+        
+        #getAvailableCarsContainer button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #ff9933;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        #availableCarsList p {
+            font-size: 16px;
+            color: #917b4f;
+            margin-bottom: 10px;
+        }
+        
+
+
+        /* USER HAIRLI */
+
+
+
+        #UserContainer{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #2e1503;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            height: auto;
+            width: 500px;
+        }
+
+
+        #userContent label {
+            font-size: 18px;
+            color: #917b4f;
+            margin-bottom: 10px;
+        }
+        
+        #userContent input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #917b4f;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #2e1503;
+        }
+
+
+
+        /* Rent Car Form */
+#rentCarContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #2e1503;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    color: #fff;
+}
+
+#rentCarContainer label {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#rentCarContainer input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #917b4f;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #2e1503;
+    box-sizing: border-box;
+}
+
+#rentCarButton {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #ff9933;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+
+/* Return Car Form */
+#returnCarContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #2e1503;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    color: #fff;
+}
+
+#returnCarContainer label {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#returnCarContainer input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #917b4f;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #2e1503;
+    box-sizing: border-box;
+    margin-top: 20px;
+
+}
+
+#returnCarButton {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #ff9933;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 20px;
+
+}
+
+
+/* Get Rent Details Form */
+#getRentDetailsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #2e1503;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    color: #fff;
+}
+
+#rentDetailsContainer label {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#rentDetailsContainer input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #917b4f;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #2e1503;
+    box-sizing: border-box;
+    
+}
+
+#getRentDetailsButton {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #ff9933;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#rentDetailsContainer p {
+    font-size: 16px;
+    color: #917b4f;
+    margin-bottom: 30px;
+}
+
+
+
+/* Rental History Container */
+#rentalHistoryContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 800px;
+    padding: 20px;
+    background-color: #2e1503;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+#getRentalHistoryButton  {
+    display: block;
+    width: 290%;
+    padding: 10px;
+    background-color: #ff9933;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 20px;
+
+}
+
+#rentalHistoryList p {
+    font-size: 16px;
+    color: #917b4f;
+    margin-bottom: 10px;
+}

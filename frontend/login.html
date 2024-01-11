@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Rent-a-Car DApp</title>
+</head>
+
+<body>
+    <div id="login-container">
+        <img src="../frontend/assets/images/metamask-logo.svg" alt="Logo" id="logo">
+
+        <p>Please log in using your MetaMask wallet.</p>
+        <button id="connect">Connect to MetaMask</button>
+        <p id="connectedAddress">Connected address: <span></span></p>
+
+    </div>
+
+    <div id="adminContent" style="display: none;">
+        <div id="AdminContainer">
+            <p>Welcome, Admin!</p>
+            <label for="newRate">New Rental Rate:</label>
+            <input type="number" id="newRate" placeholder="Enter new rate" />
+            <button id="setRate">Set Rental Rate</button>
+
+
+            <!-- Add this inside the adminContent div -->
+            <div id="addCarContainer">
+                <label for="carModel">Car Model:</label>
+                <input type="text" id="carModel" placeholder="Enter car model" />
+                <button id="addCar">Add Car</button>
+            </div>
+
+
+            <div id="deleteCarContainer">
+                <label for="deleteCarId">Car ID to Delete:</label>
+                <input type="number" id="deleteCarId" placeholder="Enter car ID" />
+                <button id="deleteCar">Delete Car</button>
+            </div>
+
+
+            <div id="getAvailableCarsContainer">
+                <button id="getAvailableCars">Get Available Cars</button>
+                <div id="availableCarsList"></div>
+            </div>
+            
+
+
+            
+
+
+        </div>
+    </div>
+
+
+
+
+    
+        <div id="userContent" style="display: none;">
+            <div id="UserContainer">                
+            <p>Welcome, User!</p>
+
+            <label for="rentCarId">Car ID to Rent:</label>
+            <input type="number" id="rentCarId" placeholder="Enter car ID" />
+            <button id="rentCarButton">Rent Car</button>
+
+            <label for="returnCarId">Car ID to Return:</label>
+            <input type="number" id="returnCarId" placeholder="Enter car ID" />
+            <button id="returnCarButton">Return Car</button>
+
+            <label for="rentDetailsCarId">Car ID for Details:</label>
+            <input type="number" id="rentDetailsCarId" placeholder="Enter car ID" />
+            <button id="getRentDetailsButton">Get Rent Details</button>
+
+            <div id="rentDetailsContainer" style="display: none;">
+                <p id="rentDetailsCarModel">Car Model: </p>
+                <p id="rentDetailsRenter">Renter: </p>
+                <p id="rentDetailsRentStartTime">Rent Start Time: </p>
+            </div>
+            
+
+            <div id="rentalHistoryContainer">
+                <button id="getRentalHistoryButton">Get Rental History</button>
+                <div id="rentalHistoryList"></div>
+            </div>
+
+            </div>
+        </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <link rel="stylesheet" href="../frontend/assets/css/login.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+        const abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"carId","type":"uint256"},{"indexed":false,"internalType":"address","name":"renter","type":"address"},{"indexed":false,"internalType":"uint256","name":"rentStartTime","type":"uint256"}],"name":"CarRented","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"carId","type":"uint256"},{"indexed":false,"internalType":"address","name":"renter","type":"address"},{"indexed":false,"internalType":"uint256","name":"rentEndTime","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"rentDuration","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"rentCost","type":"uint256"}],"name":"CarReturned","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"newRate","type":"uint256"}],"name":"RentalRateSet","type":"event"},{"inputs":[{"internalType":"string","name":"_carModel","type":"string"}],"name":"addCar","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"cars","outputs":[{"internalType":"string","name":"carModel","type":"string"},{"internalType":"address","name":"renter","type":"address"},{"internalType":"uint256","name":"rentStartTime","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"carId","type":"uint256"}],"name":"deleteCar","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getAvailableCars","outputs":[{"internalType":"uint256[]","name":"availableCarIds","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"carId","type":"uint256"}],"name":"getRentDetails","outputs":[{"internalType":"string","name":"carModel","type":"string"},{"internalType":"address","name":"renter","type":"address"},{"internalType":"uint256","name":"rentStartTime","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getRentalHistory","outputs":[{"components":[{"internalType":"uint256","name":"carId","type":"uint256"},{"internalType":"uint256","name":"rentStartTime","type":"uint256"},{"internalType":"uint256","name":"rentEndTime","type":"uint256"},{"internalType":"uint256","name":"rentCost","type":"uint256"}],"internalType":"struct RentACar.RentalHistory[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"carId","type":"uint256"}],"name":"rentCar","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"uint256","name":"","type":"uint256"}],"name":"rentalHistory","outputs":[{"internalType":"uint256","name":"carId","type":"uint256"},{"internalType":"uint256","name":"rentStartTime","type":"uint256"},{"internalType":"uint256","name":"rentEndTime","type":"uint256"},{"internalType":"uint256","name":"rentCost","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rentalRate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"carId","type":"uint256"}],"name":"returnCar","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"newRate","type":"uint256"}],"name":"setRentalRate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"totalCars","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
+        const contract = '0xCD208167F7F39349Cc08EA57D4A7d6FA28DF0fea';
+
+
+        function isAdmin(contract) {
+            const adminAddress = '0x7887961934ac11A7F5228fa62ABeC934B0F2b304';
+            return contract.toLowerCase() === adminAddress.toLowerCase();
+        }
+
+        $('#connect').click(async function () {
+
+
+            try {
+                if (window.ethereum) {
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    window.web3 = new Web3(window.ethereum);
+
+                    const connectedAddress = window.ethereum.selectedAddress;
+                    console.log('Connected to MetaMask');
+
+                    // Hide the connect button
+                    $('#connect').hide();
+                    $('#login-container').hide();
+
+                    // Show the connected address
+                    $('#connectedAddress').css('display', 'block');
+                    $('#connectedAddress > span').html(connectedAddress);
+
+                    if (isAdmin(connectedAddress)) {
+                        // Display admin content
+                        console.log('Admin logged in');
+                        $('#adminContent').show();
+                    } else {
+                        // Display user content
+                        console.log('User logged in');
+                        $('#userContent').show();
+                    }
+                }
+            } catch (error) {
+                console.error('Error during connection:', error.message);
+            }
+        });
+
+
+
+
+
+//SET RENTAL RATE
+
+$('#setRate').click(async function () {
+    try {
+        const newRate = $('#newRate').val();
+
+        if (!newRate || isNaN(newRate)) {
+            alert('Please enter a valid numeric rate.');
+            return;
+        }
+
+        const contractInstance = new window.web3.eth.Contract(abi, contract);
+        const connectedAddress = window.ethereum.selectedAddress;
+
+        // Check if the connected user is the admin
+        if (isAdmin(connectedAddress)) {
+            // Call the setRentalRate function
+            await contractInstance.methods.setRentalRate(newRate).send({ from: connectedAddress });
+
+            // Display a success message or perform any other actions
+            console.log('Rental rate set successfully:', newRate);
+        } else {
+            alert('You are not authorized to set the rental rate.');
+        }
+    } catch (error) {
+        console.error('Error setting rental rate:', error.message);
+    }
+});
+
+
+//ADD CAR
+
+
+$('#addCar').click(async function () {
+    try {
+        const carModel = $('#carModel').val();
+
+        if (!carModel) {
+            alert('Please enter a valid car model.');
+            return;
+        }
+
+        const contractInstance = new window.web3.eth.Contract(abi, contract);
+        const connectedAddress = window.ethereum.selectedAddress;
+
+        // Check if the connected user is the admin
+        if (isAdmin(connectedAddress)) {
+            // Call the addCar function
+            await contractInstance.methods.addCar(carModel).send({ from: connectedAddress });
+
+            // Display a success message or perform any other actions
+            console.log('Car added successfully:', carModel);
+        } else {
+            alert('You are not authorized to add a car.');
+        }
+    } catch (error) {
+        console.error('Error adding car:', error.message);
+    }
+});
+
+
+
+// DELETE CAR
+$('#deleteCar').click(async function () {
+    try {
+        const carIdToDelete = $('#deleteCarId').val();
+
+        if (!carIdToDelete || isNaN(carIdToDelete)) {
+            alert('Please enter a valid car ID.');
+            return;
+        }
+
+        const contractInstance = new window.web3.eth.Contract(abi, contract);
+        const connectedAddress = window.ethereum.selectedAddress;
+
+        // Check if the connected user is the admin
+        if (isAdmin(connectedAddress)) {
+            // Call the deleteCar function
+            await contractInstance.methods.deleteCar(carIdToDelete).send({ from: connectedAddress });
+
+            // Display a success message or perform any other actions
+            console.log('Car deleted successfully:', carIdToDelete);
+        } else {
+            alert('You are not authorized to delete a car.');
+        }
+    } catch (error) {
+        console.error('Error deleting car:', error.message);
+    }
+});
+
+
+
+//GET ALL RENTALS
+
+
+$('#getAllRentals').click(async function () {
+    try {
+        const contractInstance = new window.web3.eth.Contract(abi, contract);
+
+        // Call the getAllRentals function
+        const allRentals = await contractInstance.methods.getAllRentals().call();
+
+        // Display the list of all rentals on the frontend
+        displayAllRentals(allRentals);
+    } catch (error) {
+        console.error('Error getting all rentals:', error.message);
+    }
+});
+
+function displayAllRentals(allRentals) {
+    const allRentalsList = $('#allRentalsList');
+
+    // Clear existing content
+    allRentalsList.empty();
+
+    // Check if there are no rentals
+    if (allRentals.length === 0) {
+        allRentalsList.append('<p>No rentals found.</p>');
+        return;
+    }
+
+    // Display each rental
+    allRentals.forEach(rental => {
+        const rentalDetails = `<p>Car ID: ${rental.carId}, Rent Start Time: ${rental.rentStartTime}, Rent End Time: ${rental.rentEndTime}, Rent Cost: ${rental.rentCost}</p>`;
+        allRentalsList.append(rentalDetails);
+    });
+}
+
+
+// GET AVAILABLE CARS
+
+$('#getAvailableCars').click(async function () {
+    try {
+        const contractInstance = new window.web3.eth.Contract(abi, contract);
+
+        // Call the getAvailableCars function
+        const availableCars = await contractInstance.methods.getAvailableCars().call();
+
+        // Display the list of available cars on the frontend
+        displayAvailableCars(availableCars);
+    } catch (error) {
+        console.error('Error getting available cars:', error.message);
+    }
+});
+
+function displayAvailableCars(availableCars) {
+    const availableCarsList = $('#availableCarsList');
+
+    // Clear existing content
+    availableCarsList.empty();
+
+    // Check if there are no available cars
+    if (availableCars.length === 0) {
+        availableCarsList.append('<p>No available cars found.</p>');
+        return;
+    }
+
+    // Display each available car
+    availableCars.forEach(carId => {
+        const carDetails = `<p>Available Car ID: ${carId}</p>`;
+        availableCarsList.append(carDetails);
+    });
+}
+
+
+
+// RENT CAR
+
+$('#rentCarButton').click(async function () {
+    try {
+        const carIdToRent = $('#rentCarId').val();
+
+        if (!carIdToRent || isNaN(carIdToRent)) {
+            alert('Please enter a valid car ID.');
+            return;
+        }
+
+        const contractInstance = new window.web3.eth.Contract(abi, contract);
+        const connectedAddress = window.ethereum.selectedAddress;
+
+        // Call the rentCar function
+        await contractInstance.methods.rentCar(carIdToRent).send({ from: connectedAddress, value: web3.utils.toWei('1', 'ether') });
+
+        // Display a success message or perform any other actions
+        console.log('Car rented successfully:', carIdToRent);
+    } catch (error) {
+        console.error('Error renting car:', error.message);
+    }
+});
+
+
+
+// RETURN CAR
+
+$('#returnCarButton').click(async function () {
+    try {
+        const carIdToReturn = $('#returnCarId').val();
+
+        if (!carIdToReturn || isNaN(carIdToReturn)) {
+            alert('Please enter a valid car ID.');
+            return;
+        }
+
+        const contractInstance = new window.web3.eth.Contract(abi, contract);
+        const connectedAddress = window.ethereum.selectedAddress;
+
+        // Call the returnCar function
+        await contractInstance.methods.returnCar(carIdToReturn).send({ from: connectedAddress });
+
+        // Display a success message or perform any other actions
+        console.log('Car returned successfully:', carIdToReturn);
+    } catch (error) {
+        console.error('Error returning car:', error.message);
+    }
+});
+
+
+    // GET RENT DETAILS
+
+$('#getRentDetailsButton').click(async function () {
+    try {
+        const carIdForDetails = $('#rentDetailsCarId').val();
+
+        if (!carIdForDetails || isNaN(carIdForDetails)) {
+            alert('Please enter a valid car ID.');
+            return;
+        }
+
+        const contractInstance = new window.web3.eth.Contract(abi, contract);
+
+        // Call the getRentDetails function
+        const rentDetails = await contractInstance.methods.getRentDetails(carIdForDetails).call();
+
+        // Display the rent details on the frontend
+        displayRentDetails(rentDetails);
+    } catch (error) {
+        console.error('Error getting rent details:', error.message);
+    }
+});
+
+function displayRentDetails(rentDetails) {
+    // Show the rent details container
+    $('#rentDetailsContainer').css('display', 'block');
+
+    // Display the rent details on the frontend
+    $('#rentDetailsCarModel').text('Car Model: ' + rentDetails.carModel);
+    $('#rentDetailsRenter').text('Renter: ' + rentDetails.renter);
+    $('#rentDetailsRentStartTime').text('Rent Start Time: ' + rentDetails.rentStartTime);
+}
+
+
+
+
+// GET RENTAL HISTORY
+
+$('#getRentalHistoryButton').click(async function () {
+    try {
+        const contractInstance = new window.web3.eth.Contract(abi, contract);
+        const connectedAddress = window.ethereum.selectedAddress;
+
+        // Call the getRentalHistory function
+        const rentalHistory = await contractInstance.methods.getRentalHistory().call({ from: connectedAddress });
+
+        // Display the rental history on the frontend
+        displayRentalHistory(rentalHistory);
+    } catch (error) {
+        console.error('Error getting rental history:', error.message);
+    }
+});
+
+function displayRentalHistory(rentalHistory) {
+    const rentalHistoryList = $('#rentalHistoryList');
+
+    // Clear existing content
+    rentalHistoryList.empty();
+
+    // Check if there is no rental history
+    if (rentalHistory.length === 0) {
+        rentalHistoryList.append('<p>No rental history found.</p>');
+        return;
+    }
+
+    // Display each rental history entry
+    rentalHistory.forEach(entry => {
+        const entryDetails = `<p>Car ID: ${entry.carId}, Rent Start Time: ${entry.rentStartTime}, Rent End Time: ${entry.rentEndTime}, Rent Cost: ${entry.rentCost}</p>`;
+        rentalHistoryList.append(entryDetails);
+    });
+}
+
+
+    </script>
+</body>
+</html>
