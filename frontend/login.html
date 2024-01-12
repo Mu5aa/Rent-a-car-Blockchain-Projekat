@@ -30,6 +30,7 @@
                 <label for="carModel">Car Model:</label>
                 <input type="text" id="carModel" placeholder="Enter car model" />
                 <button id="addCar">Add Car</button>
+
             </div>
 
 
@@ -46,6 +47,7 @@
             </div>
             
 
+            
 
             
 
@@ -83,16 +85,27 @@
             <div id="rentalHistoryContainer">
                 <button id="getRentalHistoryButton">Get Rental History</button>
                 <div id="rentalHistoryList"></div>
+
             </div>
+
+           
+
 
             </div>
         </div>
+
+        <div id="messageContainerUser"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
     <link rel="stylesheet" href="../frontend/assets/css/login.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <script>
+
+
+
+//LOGIN SA LOGIKOM DA LI JE ADMIN ILI NE 
+
         const abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"carId","type":"uint256"},{"indexed":false,"internalType":"address","name":"renter","type":"address"},{"indexed":false,"internalType":"uint256","name":"rentStartTime","type":"uint256"}],"name":"CarRented","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"carId","type":"uint256"},{"indexed":false,"internalType":"address","name":"renter","type":"address"},{"indexed":false,"internalType":"uint256","name":"rentEndTime","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"rentDuration","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"rentCost","type":"uint256"}],"name":"CarReturned","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"newRate","type":"uint256"}],"name":"RentalRateSet","type":"event"},{"inputs":[{"internalType":"string","name":"_carModel","type":"string"}],"name":"addCar","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"cars","outputs":[{"internalType":"string","name":"carModel","type":"string"},{"internalType":"address","name":"renter","type":"address"},{"internalType":"uint256","name":"rentStartTime","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"carId","type":"uint256"}],"name":"deleteCar","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getAvailableCars","outputs":[{"internalType":"uint256[]","name":"availableCarIds","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"carId","type":"uint256"}],"name":"getRentDetails","outputs":[{"internalType":"string","name":"carModel","type":"string"},{"internalType":"address","name":"renter","type":"address"},{"internalType":"uint256","name":"rentStartTime","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getRentalHistory","outputs":[{"components":[{"internalType":"uint256","name":"carId","type":"uint256"},{"internalType":"uint256","name":"rentStartTime","type":"uint256"},{"internalType":"uint256","name":"rentEndTime","type":"uint256"},{"internalType":"uint256","name":"rentCost","type":"uint256"}],"internalType":"struct RentACar.RentalHistory[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"carId","type":"uint256"}],"name":"rentCar","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"uint256","name":"","type":"uint256"}],"name":"rentalHistory","outputs":[{"internalType":"uint256","name":"carId","type":"uint256"},{"internalType":"uint256","name":"rentStartTime","type":"uint256"},{"internalType":"uint256","name":"rentEndTime","type":"uint256"},{"internalType":"uint256","name":"rentCost","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rentalRate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"carId","type":"uint256"}],"name":"returnCar","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"newRate","type":"uint256"}],"name":"setRentalRate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"totalCars","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
         const contract = '0xCD208167F7F39349Cc08EA57D4A7d6FA28DF0fea';
 
@@ -147,7 +160,7 @@ $('#setRate').click(async function () {
         const newRate = $('#newRate').val();
 
         if (!newRate || isNaN(newRate)) {
-            alert('Please enter a valid numeric rate.');
+            showAlert('Please enter a valid numeric rate.');
             return;
         }
 
@@ -159,15 +172,16 @@ $('#setRate').click(async function () {
             // Call the setRentalRate function
             await contractInstance.methods.setRentalRate(newRate).send({ from: connectedAddress });
 
-            // Display a success message or perform any other actions
-            console.log('Rental rate set successfully:', newRate);
+            // Display a success message on the frontend
+            showMessage('Rental rate set successfully: ' + newRate);
         } else {
-            alert('You are not authorized to set the rental rate.');
+            showAlert('You are not authorized to set the rental rate.');
         }
     } catch (error) {
-        console.error('Error setting rental rate:', error.message);
+        showError('Error setting rental rate: ' + error.message);
     }
 });
+
 
 
 //ADD CAR
@@ -178,7 +192,7 @@ $('#addCar').click(async function () {
         const carModel = $('#carModel').val();
 
         if (!carModel) {
-            alert('Please enter a valid car model.');
+            showAlert('Please enter a valid car model.');
             return;
         }
 
@@ -190,13 +204,13 @@ $('#addCar').click(async function () {
             // Call the addCar function
             await contractInstance.methods.addCar(carModel).send({ from: connectedAddress });
 
-            // Display a success message or perform any other actions
-            console.log('Car added successfully:', carModel);
+            // Display a success message on the frontend
+            showMessage('Car added successfully: ' + carModel);
         } else {
-            alert('You are not authorized to add a car.');
+            showAlert('You are not authorized to add a car.');
         }
     } catch (error) {
-        console.error('Error adding car:', error.message);
+        showError('Error adding car: ' + error.message);
     }
 });
 
@@ -208,7 +222,7 @@ $('#deleteCar').click(async function () {
         const carIdToDelete = $('#deleteCarId').val();
 
         if (!carIdToDelete || isNaN(carIdToDelete)) {
-            alert('Please enter a valid car ID.');
+            showAlert('Please enter a valid car ID.');
             return;
         }
 
@@ -220,13 +234,13 @@ $('#deleteCar').click(async function () {
             // Call the deleteCar function
             await contractInstance.methods.deleteCar(carIdToDelete).send({ from: connectedAddress });
 
-            // Display a success message or perform any other actions
-            console.log('Car deleted successfully:', carIdToDelete);
+            // Display a success message on the frontend
+            showMessage('Car deleted successfully: ' + carIdToDelete);
         } else {
-            alert('You are not authorized to delete a car.');
+            showAlert('You are not authorized to delete a car.');
         }
     } catch (error) {
-        console.error('Error deleting car:', error.message);
+        showError('Error deleting car: ' + error.message);
     }
 });
 
@@ -313,7 +327,7 @@ $('#rentCarButton').click(async function () {
         const carIdToRent = $('#rentCarId').val();
 
         if (!carIdToRent || isNaN(carIdToRent)) {
-            alert('Please enter a valid car ID.');
+            showAlert('Please enter a valid car ID.');
             return;
         }
 
@@ -323,13 +337,12 @@ $('#rentCarButton').click(async function () {
         // Call the rentCar function
         await contractInstance.methods.rentCar(carIdToRent).send({ from: connectedAddress, value: web3.utils.toWei('1', 'ether') });
 
-        // Display a success message or perform any other actions
-        console.log('Car rented successfully:', carIdToRent);
+        // Display a success message on the frontend
+        showMessage('Car rented successfully: ' + carIdToRent);
     } catch (error) {
-        console.error('Error renting car:', error.message);
+        showError('Error renting car: ' + error.message);
     }
 });
-
 
 
 // RETURN CAR
@@ -339,7 +352,7 @@ $('#returnCarButton').click(async function () {
         const carIdToReturn = $('#returnCarId').val();
 
         if (!carIdToReturn || isNaN(carIdToReturn)) {
-            alert('Please enter a valid car ID.');
+            showAlert('Please enter a valid car ID.');
             return;
         }
 
@@ -349,22 +362,22 @@ $('#returnCarButton').click(async function () {
         // Call the returnCar function
         await contractInstance.methods.returnCar(carIdToReturn).send({ from: connectedAddress });
 
-        // Display a success message or perform any other actions
-        console.log('Car returned successfully:', carIdToReturn);
+        // Display a success message on the frontend
+        showMessage('Car returned successfully: ' + carIdToReturn);
     } catch (error) {
-        console.error('Error returning car:', error.message);
+        showError('Error returning car: ' + error.message);
     }
 });
 
 
     // GET RENT DETAILS
 
-$('#getRentDetailsButton').click(async function () {
+    $('#getRentDetailsButton').click(async function () {
     try {
         const carIdForDetails = $('#rentDetailsCarId').val();
 
         if (!carIdForDetails || isNaN(carIdForDetails)) {
-            alert('Please enter a valid car ID.');
+            showAlert('Please enter a valid car ID.');
             return;
         }
 
@@ -376,7 +389,7 @@ $('#getRentDetailsButton').click(async function () {
         // Display the rent details on the frontend
         displayRentDetails(rentDetails);
     } catch (error) {
-        console.error('Error getting rent details:', error.message);
+        showError('Error getting rent details: ' + error.message);
     }
 });
 
@@ -430,6 +443,30 @@ function displayRentalHistory(rentalHistory) {
 }
 
 
+
+
+
+//USER
+function showMessage(message) {
+    const messageContainer = $('#messageContainerUser');
+    messageContainer.css('background-color', '#d4edda'); // green background for success
+    messageContainer.text(message);
+    messageContainer.show().delay(3000).fadeOut(); // show for 3 seconds and then fade out
+}
+
+function showAlert(message) {
+    const messageContainer = $('#messageContainerUser');
+    messageContainer.css('background-color', '#f8d7da'); // red background for alert
+    messageContainer.text(message);
+    messageContainer.show().delay(3000).fadeOut();
+}
+
+function showError(message) {
+    const messageContainer = $('#messageContainerUser');
+    messageContainer.css('background-color', '#f8d7da'); // red background for error
+    messageContainer.text('Error: ' + message);
+    messageContainer.show().delay(3000).fadeOut();
+}
     </script>
 </body>
 </html>

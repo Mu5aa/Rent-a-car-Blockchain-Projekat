@@ -501,3 +501,18 @@
     color: #917b4f;
     margin-bottom: 10px;
 }
+
+
+
+
+
+#messageContainerUser {
+    display: none;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f8f8f8;
+    color: #2e1503;
+    
+}
+
